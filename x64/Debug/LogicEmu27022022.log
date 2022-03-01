@@ -1,0 +1,6 @@
+﻿  Source.cpp
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\Source.cpp(36,66): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\Source.cpp(39,29): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\Source.cpp(48,25): warning C4018: '<': signed/unsigned mismatch
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\Source.cpp(50,26): warning C4018: '<': signed/unsigned mismatch
+  LogicEmu27022022.vcxproj -> C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\x64\Debug\LogicEmu27022022.exe
