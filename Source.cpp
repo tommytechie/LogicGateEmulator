@@ -1,6 +1,8 @@
 #include "tommylogic.h"
+#include "objectgate.h"
 
 using std::vector; using std::cout; using std::endl; using std::string;
+using tommylogic::transposeArr; using tommylogic::generateTruthtable;
 /*
 TRUTH TABLE
 
@@ -11,51 +13,15 @@ AND----OR----NAND----NOR----XNOR----XOR
 11 1   11 1  11 0    11 0   11 1    11 0
 
 */
-vector<vector<int>> transposeArr(vector<vector<int>> input) {
-	vector<vector<int>> output;
-	for (size_t i = 0; i < input[0].size(); i++) {
-		output.push_back({});
-		for (size_t j = 0; j < input.size(); j++) {
-			output[i].push_back(0);
-		}
-	}
-	
-	for (unsigned x = 0; x < output.size(); ++x)
-	{
-		for (unsigned y = 0; y < output[x].size(); ++y)
-		{
-			output[x][y] = input[y][x];
-			//std::cout << output[x][y] << " ";
-		}
-		//std::cout << std::endl;
-	}
-	return output;
+
+int AND(int A, int B) {
+	return (A == 1 && B == 1);
 }
 
-vector<vector<int>> generateTruthtable(int n) {
-	std::vector<std::vector<int> > output(n, std::vector<int>(1 << n));
-
-	unsigned num_to_fill = 1U << (n - 1);
-	for (unsigned col = 0; col < n; ++col, num_to_fill >>= 1U)
-	{
-		for (unsigned row = num_to_fill; row < (1U << n); row += (num_to_fill * 2))
-		{
-			std::fill_n(&output[col][row], num_to_fill, 1);
-		}
-	}
-
-	// These loops just print out the results, nothing more.
-	for (unsigned x = 0; x < (1 << n); ++x)
-	{
-		for (unsigned y = 0; y < n; ++y)
-		{
-			//std::cout << output[y][x] << " ";
-		}
-		//std::cout << std::endl;
-	}
-
-	return output;
+int OR(int A, int B) {
+	return (A == 1 || B == 1);
 }
+
 
 int main() {
 	vector<vector<int>> input1 = transposeArr(generateTruthtable(1)); //{ { 0 }, { 1 } };
@@ -66,10 +32,27 @@ int main() {
 
 	logic6 L6(""); logic4 L4(""); logic3 L3(""); logic2 L2(""); logic1 L1("");
 	
-	L3.run(input3, logic3("TEST1"));
-	printTruthtable(3, input3, L3.result);
+	///L3.testInput(input3, logic3("TEST1"));
+	//L3.run(input3, logic3("TEST1"));
+	//printTruthtable(3, input3, L3.result);
+
+	ObjGate AND; ObjGate OR; ObjGate AND1;
+	AND.define(1); OR.define(2); AND1.define(1);
+	
+	cout << "AND: " << AND.returnValue() << endl;
+	cout << "OR: " << OR.returnValue() << endl;
+
+	cout << "==============" << endl;
+	AND1.a(&AND, &OR);
+
+	cout << AND1.returnValue() << endl;
+
 
 }
+//Next Update: (TODO) use the object output as input
+
+// TODO and also create other objects to represent gates, not functions, i know it's hard for my stupid brain to do so...
+
 
 /*  //Example Driver Code:
 	L2.testInput(input2, logic2("AND")); cout << endl;
