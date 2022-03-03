@@ -32,24 +32,23 @@ int main() {
 
 	logic6 L6(""); logic4 L4(""); logic3 L3(""); logic2 L2(""); logic1 L1("");
 	
-	///L3.testInput(input3, logic3("TEST1"));
-	//L3.run(input3, logic3("TEST1"));
-	//printTruthtable(3, input3, L3.result);
+	
 
-	ObjGate AND; ObjGate OR; ObjGate AND1;
-	AND.define(1); OR.define(2); AND1.define(1);
+	ObjGate AND(1, 0); ObjGate OR(1, 1); ObjGate AND1; ObjGate AND2;
+	AND.define(1); OR.define(2); AND1.define(1); AND2.define(1);
 	
 	cout << "AND: " << AND.returnValue() << endl;
 	cout << "OR: " << OR.returnValue() << endl;
 
 	cout << "==============" << endl;
-	AND1.a(&AND, &OR);
+	AND2.a(AND1.a(&AND, &OR),1);
 
-	cout << AND1.returnValue() << endl;
+	cout << "AND1 " << AND1.returnValue() << endl;
+
+	cout << "AND2 " << AND2.returnValue() << endl;
 
 
 }
-//Next Update: (TODO) use the object output as input
 
 // TODO and also create other objects to represent gates, not functions, i know it's hard for my stupid brain to do so...
 
@@ -70,4 +69,9 @@ int main() {
 	L6.run(input6, logic6("TEST2"));
 	printTruthtable(6, input6, L6.result);
 	cout << "=================" << endl;
+
+	///L3.testInput(input3, logic3("TEST1"));
+	//L3.run(input3, logic3("TEST1"));
+	//printTruthtable(3, input3, L3.result);
+
 */

@@ -5,17 +5,17 @@ using std::pair;
 
 class ObjGate {
 private:
-	void AND(vector<int> input) {
-		output = (input[0] == 1 && input[1] == 1);
+	int AND(vector<int> input) {
+		return (input[0] == 1 && input[1] == 1);
 	}
 
-	void OR(vector<int> input) {
-		output = (input[0] == 1 || input[1] == 1);
+	int OR(vector<int> input) {
+		return (input[0] == 1 || input[1] == 1);
 	}
 
-	void NOT(vector<int> input) {
-		if (input[0] != 0) output = 0;
-		else output = 1;
+	int NOT(vector<int> input) {
+		if (input[0] != 0) return 0;
+		else return 1;
 	}
 
 	ObjGate* LocalgateA;
@@ -25,7 +25,7 @@ private:
 
 	int output = 2; //affected by logic_func (function pointer)
 
-	void (ObjGate::* logic_func)(vector<int>);
+	int (ObjGate::* logic_func)(vector<int>);
 
 	int WhichContructor = 0;
 
@@ -56,20 +56,48 @@ public:
 		LocalgateB = gateB; input.push_back(LocalgateB->returnValue());
 	}
 
-	ObjGate a(ObjGate* gateA, ObjGate* gateB) { //TODO
+	int a(ObjGate* gateA) {
+		LocalgateA = gateA;
+		input.push_back(LocalgateA->returnValue());
+		calculation();
+		return output;
+	}
+	int a(ObjGate* gateA, ObjGate* gateB) { //TODO
 		LocalgateA = gateA;
 		LocalgateB = gateB;
-
 		input.push_back(LocalgateA->returnValue());
 		input.push_back(LocalgateB->returnValue());
-
-		vector<int> logic_func(input);
-
-		return gateA;
+		calculation();
+		return output;
+	}
+	int a(int inputA) {
+		input.push_back(inputA);
+		calculation();
+		return output;
+	}
+	int a(int inputA, int inputB) {
+		input.push_back(inputA);
+		input.push_back(inputB);
+		calculation();
+		return output;
+	}
+	int a(int inputA, ObjGate* gateB) {
+		input.push_back(inputA);
+		LocalgateB = gateB; input.push_back(LocalgateB->returnValue());
+		calculation();
+		return output;
+	}
+	int a(ObjGate* gateA, int inputB) {
+		LocalgateA = gateA; input.push_back(LocalgateA->returnValue());
+		input.push_back(inputB);
+		calculation();
+		return output;
 	}
 
+
 	void calculation() {
-		vector<int> logic_func(input);
+		if (input.size() < 2) { cout << "You are using a gate with INSUFFICIENT input(s)" << endl; return; }
+		output = (this->*logic_func)(input);
 	}
 
 	void define(int GateNumber) {
@@ -87,10 +115,10 @@ public:
 		default:
 			logic_func = &ObjGate::AND;
 		}
-		calculation();
 	}
 
 	int returnValue() {//return the output
+		calculation();
 		return output;
 	}
 
