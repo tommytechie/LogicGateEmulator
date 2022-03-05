@@ -30,22 +30,13 @@ int main() {
 	vector<vector<int>> input4 = transposeArr(generateTruthtable(4)); //{ { 0, 0, 0, 0 }, { 0 , 0 , 0 , 1 }, { 0 , 0 , 1 , 0 }, { 0 , 0 , 1 , 1 }, { 0 , 1 , 0 , 0 },{ 0 , 1 , 0 , 1 },{ 0 , 1 , 1 , 0 },{ 0 , 1 , 1 , 1 },{ 1 , 0 , 0 , 0 },{ 1 , 0 , 0 , 1 },{ 1 , 0 , 1 , 0 },{ 1 , 0 , 1 , 1 },{ 1 , 1 , 0 , 0 },{ 1 , 1 , 0 , 1 },{ 1 , 1 , 1 , 0 },{ 1 , 1 , 1 , 1} };
 	vector<vector<int>> input6 = transposeArr(generateTruthtable(6));
 
-	logic6 L6(""); logic4 L4(""); logic3 L3(""); logic2 L2(""); logic1 L1("");
 	
 	
-
-	ObjGate AND(1, 0); ObjGate OR(1, 1); ObjGate AND1; ObjGate AND2;
-	AND.define(1); OR.define(2); AND1.define(1); AND2.define(1);
+	LogicGate obj1({1,1,1,1});
+	LogicGate obj2({ 1,0 });
 	
-	cout << "AND: " << AND.returnValue() << endl;
-	cout << "OR: " << OR.returnValue() << endl;
-
-	cout << "==============" << endl;
-	AND2.a(AND1.a(&AND, &OR),1);
-
-	cout << "AND1 " << AND1.returnValue() << endl;
-
-	cout << "AND2 " << AND2.returnValue() << endl;
+	obj1.define({1,1});
+	obj2.define({ 1 });
 
 
 }
@@ -53,7 +44,12 @@ int main() {
 // TODO and also create other objects to represent gates, not functions, i know it's hard for my stupid brain to do so...
 
 
-/*  //Example Driver Code:
+/*  
+	//class logic1 - 6...
+	//Example Driver Code:
+
+	logic6 L6(""); logic4 L4(""); logic3 L3(""); logic2 L2(""); logic1 L1("");
+
 	L2.testInput(input2, logic2("AND")); cout << endl;
 	L2.testInput(input2, logic2("OR")); cout << endl;
 	L1.testInput(input1, logic1("NOT")); cout << endl;
@@ -74,4 +70,22 @@ int main() {
 	//L3.run(input3, logic3("TEST1"));
 	//printTruthtable(3, input3, L3.result);
 
+*/
+
+/*
+	//class ObjGate...
+	//Example Driver Code:
+
+	ObjGate AND(1, 0); ObjGate OR(1, 1); ObjGate AND1; ObjGate AND2;
+	AND.define(1); OR.define(2); AND1.define(1); AND2.define(1);
+
+	cout << "AND: " << AND.returnValue() << endl;
+	cout << "OR: " << OR.returnValue() << endl;
+
+	cout << "==============" << endl;
+	AND2.a(AND1.a(&AND, &OR),1);
+
+	cout << "AND1 " << AND1.returnValue() << endl;
+
+	cout << "AND2 " << AND2.returnValue() << endl;
 */
