@@ -122,6 +122,8 @@ public:
 
 };
 
+//=====================================================================================================================================
+
 class LogicGate {
 private:
 
@@ -141,10 +143,12 @@ private:
 		else return 1;
 	}
 	int NAND(vector<int> input, unsigned int pos) {
-		return NOT({ AND(input, pos) }, pos);
+		if (AND(input, pos) != 0)return 0;
+		else return 1;
 	}
 	int NOR(vector<int> input, unsigned int pos) {
-		return NOT({ OR(input, pos) }, pos);
+		if (OR(input, pos) != 0)return 0;
+		else return 1;
 	}
 	int XNOR(vector<int> input, unsigned int pos) {
 		if (AND(input, pos) == 1 || NOR(input, pos) == 1)return 1;
@@ -155,52 +159,64 @@ private:
 		else return 0;
 	}
 
-	int assignFunctions(vector<int> inputgates) {
+	void assignFunctions(vector<int> inputgates) {
 		for (int i = 0; i < inputgates.size(); i++) {
 			switch (inputgates[i])
 			{
 			case 0:
 				GateFunc[i] = &LogicGate::YES;
+				position.push_back(1);
 				break;
 			case 1:
 				GateFunc[i] = &LogicGate::AND;
+				position.push_back(2);
 				break;
 			case 2:
 				GateFunc[i] = &LogicGate::OR;
+				position.push_back(2);
 				break;
 			case 3:
 				GateFunc[i] = &LogicGate::NOT;
+				position.push_back(1);
 				break;
 			case 4:
 				GateFunc[i] = &LogicGate::NAND;
+				position.push_back(2);
 				break;
 			case 5:
 				GateFunc[i] = &LogicGate::NOR;
+				position.push_back(2);
 				break;
 			case 6:
 				GateFunc[i] = &LogicGate::XNOR;
+				position.push_back(2);
 				break;
 			case 7:
 				GateFunc[i] = &LogicGate::XOR;
+				position.push_back(2);
 				break;
 			default:
-				break;
+				break;//FOR OBJECTIFIED GATES
 			}
 		}
-		return 0;
 	}
 
 	LogicGate* LocalgateA;
 	LogicGate* LocalgateB;
 
+	
+
+public:
+	//====Fundamental=======
+	vector<int> position = { 0 };
+
 	vector<int> input;
 
 	vector<int> Fgates;
 
-	vector<int> output = {};
+	vector<int> output;
 
-public:
-	//====Fundamental=======
+
 	LogicGate(vector<int> inputvalue) {
 		input = inputvalue;
 	}
@@ -211,7 +227,22 @@ public:
 	}
 
 	void parallelCalc() {
-		output[0] = (this->*GateFunc[0])(input, 0);
+		output.clear();
+		int Pos = 0;
+		for (int i = 0; i < Fgates.size(); i++) {
+			//cout << "i = " << i << endl;
+			Pos += position[i];
+			//cout << "Pos = " << Pos << endl;
+			output.push_back((this->*GateFunc[i])(input, Pos));
+			
+		}
+	}
+
+	void clear() {
+		position = { 0 };
+		input.clear();
+		Fgates.clear();
+		output.clear();
 	}
 
 	vector<int> returnValue() {//return the output
@@ -221,7 +252,7 @@ public:
 
 	//=======Objectify========================
 	void define(LogicGate obj) {  //Overloading Define function for inputting previous objects into it
-
+		//TODO
 	}
 };
 

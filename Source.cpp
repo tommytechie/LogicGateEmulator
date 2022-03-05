@@ -22,6 +22,7 @@ int OR(int A, int B) {
 	return (A == 1 || B == 1);
 }
 
+void foo(vector<vector<int>> input, int i);
 
 int main() {
 	vector<vector<int>> input1 = transposeArr(generateTruthtable(1)); //{ { 0 }, { 1 } };
@@ -32,13 +33,25 @@ int main() {
 
 	
 	
-	LogicGate obj1({1,1,1,1});
-	LogicGate obj2({ 1,0 });
-	
-	obj1.define({1,1});
-	obj2.define({ 1 });
+	for (int i = 0; i < input4.size(); i++) {
+		for (int j = 0; j < input4[i].size(); j++) {
+			cout << input4[i][j] << " ";
+		}
+		cout << "| "; foo(input4, i); cout << endl;
+	}
 
 
+}
+
+void foo(vector<vector<int>> input, int i) {
+	LogicGate obj3(input[i]);
+	obj3.define({ 4,7 });
+	obj3.parallelCalc();
+	for (int i = 0; i < obj3.output.size(); i++) {
+		cout << obj3.output[i] << " ";
+	}
+	cout << endl;
+	obj3.clear();
 }
 
 // TODO and also create other objects to represent gates, not functions, i know it's hard for my stupid brain to do so...
@@ -88,4 +101,30 @@ int main() {
 	cout << "AND1 " << AND1.returnValue() << endl;
 
 	cout << "AND2 " << AND2.returnValue() << endl;
+*/
+
+/*
+	//class LogicGate...
+	//Example Driver Code! Unfinished.
+
+	cout << "====INPUT====" << endl;
+	for (int i = 0; i < obj1.input.size(); i++) {
+		cout << i << ". " << obj1.input[i] << endl;
+	}
+
+	cout << "====POS====" << endl;
+	for (int i = 0; i < obj1.position.size(); i++) {
+		cout << obj1.position[i] << endl;
+	}
+
+	//for (int i = 0; i < obj2.position.size(); i++) {
+	//	cout << obj2.position[i] << endl;
+	//}
+
+	cout << "====OUTPUT====" << endl;
+	obj1.parallelCalc();
+
+	for (int i = 0; i < obj1.output.size(); i++) {
+		cout << obj1.output[i] << endl;
+	}
 */
