@@ -166,67 +166,159 @@ private:
 			case 0:
 				GateFunc[i] = &LogicGate::YES;
 				position.push_back(1);
+				NumOfInputs = NumOfInputs + 1; input.push_back(0);
 				break;
 			case 1:
 				GateFunc[i] = &LogicGate::AND;
 				position.push_back(2);
+				NumOfInputs = NumOfInputs + 2; input.push_back(0); input.push_back(0);
 				break;
 			case 2:
 				GateFunc[i] = &LogicGate::OR;
 				position.push_back(2);
+				NumOfInputs = NumOfInputs + 2; input.push_back(0); input.push_back(0);
 				break;
 			case 3:
 				GateFunc[i] = &LogicGate::NOT;
 				position.push_back(1);
+				NumOfInputs = NumOfInputs + 1; input.push_back(0);
 				break;
 			case 4:
 				GateFunc[i] = &LogicGate::NAND;
 				position.push_back(2);
+				NumOfInputs = NumOfInputs + 2; input.push_back(0); input.push_back(0);
 				break;
 			case 5:
 				GateFunc[i] = &LogicGate::NOR;
 				position.push_back(2);
+				NumOfInputs = NumOfInputs + 2; input.push_back(0); input.push_back(0);
 				break;
 			case 6:
 				GateFunc[i] = &LogicGate::XNOR;
 				position.push_back(2);
+				NumOfInputs = NumOfInputs + 2; input.push_back(0); input.push_back(0);
 				break;
 			case 7:
 				GateFunc[i] = &LogicGate::XOR;
 				position.push_back(2);
+				NumOfInputs = NumOfInputs + 2; input.push_back(0); input.push_back(0);
 				break;
 			default:
-				break;//FOR OBJECTIFIED GATES
+				break;//Nothing...
 			}
 		}
+	}
+
+	int getNumOfInputs() {
+		int tmpNumOfInputs = 0;
+		for (int i = 0; i < LogicGateArr.size(); i++) {
+			tmpNumOfInputs += LogicGateArr[i].input.size();
+		}
+		NumOfInputs = tmpNumOfInputs;
+		return tmpNumOfInputs;
+	}
+
+	int getNumOfOutputs() {
+		int tmpNumOfOutputs = 0;
+		for (int i = 0; i < LogicGateArr.size(); i++) {
+			tmpNumOfOutputs += LogicGateArr[i].output.size();
+		}
+		NumOfOutputs = tmpNumOfOutputs;
+		return tmpNumOfOutputs;
 	}
 
 	LogicGate* LocalgateA;
 	LogicGate* LocalgateB;
 
-	
+	template <typename T>
+	void printVector(vector<T> input) {
+		for (int i = 0; i < input.size(); i++) {
+			cout << input[i] << " ";
+		}
+	}
 
 public:
-	//====Fundamental=======
-	vector<int> position = { 0 };
 
-	vector<int> input;
+	string name = "example gate";
+
+	vector<int> position = { 0 }; //used in fundamental only
+
+	vector<int> input = {};
 
 	vector<int> Fgates;
 
 	vector<int> output;
 
+	int NumOfInputs; //Current Object NumOfInputs
+	int NumOfOutputs; //Current Object NumOfOutputs
 
+	vector<LogicGate> LogicGateArr;
+
+	LogicGate() {
+
+	}
 	LogicGate(vector<int> inputvalue) {
 		input = inputvalue;
 	}
 
-	void define(vector<int> inputgates) {
+	void inputValues(vector<int> inputvalue) { //input value, if you didn't input when initializing...
+		input = inputvalue;
+		output.clear();
+	}
+
+	void define(vector<int> inputgates) { //define fundamental gates... (not useful when you are using objects as gates)
 		Fgates = inputgates;
 		assignFunctions(Fgates);
 	}
+	void define(vector<LogicGate> LogicGateArrayInput) { //input from array of Logic Gates, if you didn't input when initializing...
+		input.clear();
+		LogicGateArr = LogicGateArrayInput;
+		for (int i = 0; i < LogicGateArr.size(); i++) {
+			LogicGateArr[i].parallelCalc();
+			for (int j = 0; j < LogicGateArr[i].output.size(); j++) {
+				input.push_back(LogicGateArr[i].output[j]);
+			}
+			//cout << "Logic Gate " << i << ": "; printVector<int>(input); cout << endl;
+		}
+		getNumOfOutputs();
+		getNumOfInputs();
+		//cout << "Input Size Gate 1: " << LogicGateArr[0].input.size() << endl;
+		//cout << "Input Size Gate 2: " << LogicGateArr[1].input.size() << endl;
+		//cout << "Output Size Gate 1: " << LogicGateArr[0].output.size() << endl;
+		//cout << "Output Size Gate 2: " << LogicGateArr[1].output.size() << endl;
+	}
 
-	void parallelCalc() {
+	void Calc() { //Object Gate Calculation(complex objects) //TODO FIX IT
+		vector<int> tmpInputArr;
+		vector<int> tmpPos = {0};
+		int tmpMaxInputSize = 0;
+		for (int i = 0; i < LogicGateArr.size(); i++) {
+			tmpMaxInputSize += LogicGateArr[i].NumOfInputs;
+			tmpPos.push_back(tmpMaxInputSize);
+		}
+		tmpPos.push_back(tmpMaxInputSize);
+		if (input.size() < tmpMaxInputSize) {
+			vector<int> tmp(50, 0);
+			input = tmp;
+			cout << "INPUT SIZE TOO SMALL" << endl;
+		}
+		for (int i = 0; i < LogicGateArr.size(); i++) {
+			for (int j = tmpPos[i]; j < tmpPos[i + 1]; j++) {
+				tmpInputArr.push_back(input[j]);
+			}
+			LogicGateArr[i].inputValues(tmpInputArr);
+			LogicGateArr[i].parallelCalc();
+		}
+		for (int i = 0; i < LogicGateArr.size(); i++) {
+			for (int j = 0; j < LogicGateArr[i].output.size(); j++) {
+				output.push_back(LogicGateArr[i].output[j]);
+			}
+		}
+		cout << "input arr: ";  printVector<int>(input); cout << endl;
+		//cout << "inputs of calc: ";  printVector<int>(tmpInputArr); cout << endl;
+	}
+
+	void parallelCalc() { //Fundamental Gate Calculation
 		output.clear();
 		int Pos = 0;
 		for (int i = 0; i < Fgates.size(); i++) {
@@ -245,9 +337,15 @@ public:
 		output.clear();
 	}
 
-	vector<int> returnValue() {//return the output
-		//calculation();
-		return output;
+	void setName(string display_name) {
+		name = display_name;
+	}
+
+	void printValue() {//return the output
+		cout << "Answer for " << name << " is: ";
+		for (int i = 0; i < output.size(); i++) {
+			cout << output[i] << " ";
+		}cout << endl;
 	}
 
 	//=======Objectify========================

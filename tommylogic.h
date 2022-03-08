@@ -32,7 +32,7 @@ namespace tommylogic {
 		}
 	}
 
-	vector<vector<int>> generateTruthtable(int n) {
+	vector<vector<int>> generateTruthtableYX(int n) {
 		std::vector<std::vector<int> > output(n, std::vector<int>(1 << n));
 
 		unsigned num_to_fill = 1U << (n - 1);
@@ -75,6 +75,11 @@ namespace tommylogic {
 			}
 			//std::cout << std::endl;
 		}
+		return output;
+	}
+
+	vector<vector<int>> generateTruthtableXY(int decimal_places) {
+		vector<vector<int>> output = transposeArr(generateTruthtableYX(decimal_places));
 		return output;
 	}
 }

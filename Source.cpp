@@ -2,7 +2,7 @@
 #include "objectgate.h"
 
 using std::vector; using std::cout; using std::endl; using std::string;
-using tommylogic::transposeArr; using tommylogic::generateTruthtable;
+using tommylogic::generateTruthtableXY;
 /*
 TRUTH TABLE
 
@@ -14,38 +14,40 @@ AND----OR----NAND----NOR----XNOR----XOR
 
 */
 
-int AND(int A, int B) {
-	return (A == 1 && B == 1);
-}
-
-int OR(int A, int B) {
-	return (A == 1 || B == 1);
-}
-
 void foo(vector<vector<int>> input, int i);
 
-int main() {
-	vector<vector<int>> input1 = transposeArr(generateTruthtable(1)); //{ { 0 }, { 1 } };
-	vector<vector<int>> input2 = transposeArr(generateTruthtable(2)); //{ { 0 , 0 }, { 0 , 1 }, { 1 , 0 }, { 1 , 1 } };
-	vector<vector<int>> input3 = transposeArr(generateTruthtable(3));
-	vector<vector<int>> input4 = transposeArr(generateTruthtable(4)); //{ { 0, 0, 0, 0 }, { 0 , 0 , 0 , 1 }, { 0 , 0 , 1 , 0 }, { 0 , 0 , 1 , 1 }, { 0 , 1 , 0 , 0 },{ 0 , 1 , 0 , 1 },{ 0 , 1 , 1 , 0 },{ 0 , 1 , 1 , 1 },{ 1 , 0 , 0 , 0 },{ 1 , 0 , 0 , 1 },{ 1 , 0 , 1 , 0 },{ 1 , 0 , 1 , 1 },{ 1 , 1 , 0 , 0 },{ 1 , 1 , 0 , 1 },{ 1 , 1 , 1 , 0 },{ 1 , 1 , 1 , 1} };
-	vector<vector<int>> input6 = transposeArr(generateTruthtable(6));
+int main() {	
+	LogicGate obj1; LogicGate obj2; LogicGate obj3; LogicGate obj4;
 
-	
-	
-	for (int i = 0; i < input4.size(); i++) {
-		for (int j = 0; j < input4[i].size(); j++) {
-			cout << input4[i][j] << " ";
-		}
-		cout << "| "; foo(input4, i); cout << endl;
-	}
+	//obj1.inputValues({ 1,1,1,0 }); 
+	obj1.define({ 1,2,3,3 });
+	//obj2.inputValues({ 1,1,1,0 }); 
+	obj2.define({ 2,1,3 });
+	obj4.define({ 1,1 });
+	obj3.define({ obj1, obj2, obj4 }); 
 
 
+	//0 0 1 0 0 1 1 1 0 0 0 1 0 0 0
+	//0 1 1 0 0 0 1 0 0
+	obj3.inputValues(generateTruthtableXY(15)[5000]); //TODO Figure out assigning values to internal objects
+	obj3.Calc(); //TODO calculate them and Figure out passing out internal objects' outputs correctly
+	obj3.printValue();
+
+	cout << "NumOfInputs: " << obj3.NumOfInputs << endl;
+	cout << "NumOfOutputs: " << obj3.NumOfOutputs << endl;
+
+	//for (int i = 0; i < input6.size(); i++) {
+	//	for (int j = 0; j < input6[i].size(); j++) {
+	//		cout << input6[i][j] << " ";
+	//	}
+	//	cout << "| "; foo(input6, i); cout << endl;
+	//}
 }
 
 void foo(vector<vector<int>> input, int i) {
+	//0 Yes, 1 And, 2 Or, 3 Not, 4 Nand, 5 Nor, 6 Xnor, 7 Xor
 	LogicGate obj3(input[i]);
-	obj3.define({ 4,7 });
+	obj3.define({ 4,7,6 });
 	obj3.parallelCalc();
 	for (int i = 0; i < obj3.output.size(); i++) {
 		cout << obj3.output[i] << " ";
@@ -54,8 +56,10 @@ void foo(vector<vector<int>> input, int i) {
 	obj3.clear();
 }
 
-// TODO and also create other objects to represent gates, not functions, i know it's hard for my stupid brain to do so...
-
+//TODO find out how many inputs the obj inputs and how many outputs the obj outputs and then process it inside the big object and then output accordingly...
+//TODO Map the Outputs of the Object Gates to the Input of the Bigger Gate itself (current Object)
+//TODO Figure out how many Inputs should itself take, for it to be used for other bigger gates in the future.
+//TODO Map the future Inputs into the smaller inside object gates...
 
 /*  
 	//class logic1 - 6...
