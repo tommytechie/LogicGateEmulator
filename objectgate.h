@@ -241,6 +241,8 @@ public:
 
 	string name = "example gate";
 
+	int ObjectTypeIdentifier = 0; //0 = unassigned, 1 = fundamental, 2 = multi(object of multiple fundamental gates), 3 = complex (object of multiple multi gates)
+
 	vector<int> position = { 0 }; //used in fundamental only
 
 	vector<int> input = {};
@@ -269,6 +271,7 @@ public:
 	void define(vector<int> inputgates) { //define fundamental gates... (not useful when you are using objects as gates)
 		Fgates = inputgates;
 		assignFunctions(Fgates);
+		ObjectTypeIdentifier = 1; //Identify it as a Fundamental-gate Object.
 	}
 	void define(vector<LogicGate> LogicGateArrayInput) { //input from array of Logic Gates, if you didn't input when initializing...
 		input.clear();
@@ -282,6 +285,7 @@ public:
 		}
 		getNumOfOutputs();
 		getNumOfInputs();
+		ObjectTypeIdentifier = 2; //Identify it as a Multi-gate Object.
 		//cout << "Input Size Gate 1: " << LogicGateArr[0].input.size() << endl;
 		//cout << "Input Size Gate 2: " << LogicGateArr[1].input.size() << endl;
 		//cout << "Output Size Gate 1: " << LogicGateArr[0].output.size() << endl;
@@ -303,16 +307,23 @@ public:
 			cout << "INPUT SIZE TOO SMALL" << endl;
 		}
 		for (int i = 0; i < LogicGateArr.size(); i++) {
+			cout << "Injected value into gate(" << LogicGateArr[i].name << ") " << i << " : ";
 			for (int j = tmpPos[i]; j < tmpPos[i + 1]; j++) {
 				tmpInputArr.push_back(input[j]);
+				cout << input[j] << " ";
 			}
+			cout << endl;
 			LogicGateArr[i].inputValues(tmpInputArr);
 			LogicGateArr[i].parallelCalc();
+			tmpInputArr.clear();
 		}
 		for (int i = 0; i < LogicGateArr.size(); i++) {
+			cout << "Output value from gate(" << LogicGateArr[i].name << ") " << i << " : ";
 			for (int j = 0; j < LogicGateArr[i].output.size(); j++) {
 				output.push_back(LogicGateArr[i].output[j]);
+				cout << LogicGateArr[i].output[j];
 			}
+			cout << endl;
 		}
 		cout << "input arr: ";  printVector<int>(input); cout << endl;
 		//cout << "inputs of calc: ";  printVector<int>(tmpInputArr); cout << endl;

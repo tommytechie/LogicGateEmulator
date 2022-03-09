@@ -14,27 +14,30 @@ AND----OR----NAND----NOR----XNOR----XOR
 
 */
 
-void foo(vector<vector<int>> input, int i);
+void gateLoop(LogicGate inputGate, int NumOfInputs, int i);
 
-int main() {	
-	LogicGate obj1; LogicGate obj2; LogicGate obj3; LogicGate obj4;
+int main() {
+	LogicGate obj1; LogicGate obj2; LogicGate obj3; LogicGate multi1; LogicGate multi2; LogicGate Complex1;
 
 	//obj1.inputValues({ 1,1,1,0 }); 
-	obj1.define({ 1,2,3,3 });
-	//obj2.inputValues({ 1,1,1,0 }); 
-	obj2.define({ 2,1,3 });
-	obj4.define({ 1,1 });
-	obj3.define({ obj1, obj2, obj4 }); 
 
+	obj1.define({ 1,2,3 }); obj1.setName("AND,OR,NOT");
+	obj2.define({ 2,1,3 }); obj2.setName("OR,AND,NOT");
+	obj3.define({ 1,1 }); obj3.setName("AND,AND");
 
-	//0 0 1 0 0 1 1 1 0 0 0 1 0 0 0
-	//0 1 1 0 0 0 1 0 0
-	obj3.inputValues(generateTruthtableXY(15)[5000]); //TODO Figure out assigning values to internal objects
-	obj3.Calc(); //TODO calculate them and Figure out passing out internal objects' outputs correctly
-	obj3.printValue();
+	multi1.define({ obj1, obj2, obj3 }); multi1.setName("multi-1");
+	multi2.define({ obj3, obj2, obj1 }); multi2.setName("multi-2");
 
-	cout << "NumOfInputs: " << obj3.NumOfInputs << endl;
-	cout << "NumOfOutputs: " << obj3.NumOfOutputs << endl;
+	Complex1.define({ multi1,multi2 }); Complex1.setName("Complex-1");
+
+	gateLoop(obj1, 5, 10);
+	gateLoop(multi1, 14, 5);
+	gateLoop(multi2, 14, 5);
+	//gateLoop(Complex1, 28, 10);
+	
+
+	cout << "NumOfInputs: " << multi1.NumOfInputs << endl;
+	cout << "NumOfOutputs: " << multi1.NumOfOutputs << endl;
 
 	//for (int i = 0; i < input6.size(); i++) {
 	//	for (int j = 0; j < input6[i].size(); j++) {
@@ -44,16 +47,22 @@ int main() {
 	//}
 }
 
-void foo(vector<vector<int>> input, int i) {
+void gateLoop(LogicGate inputGate, int NumOfInputs, int iterations) {
 	//0 Yes, 1 And, 2 Or, 3 Not, 4 Nand, 5 Nor, 6 Xnor, 7 Xor
-	LogicGate obj3(input[i]);
-	obj3.define({ 4,7,6 });
-	obj3.parallelCalc();
-	for (int i = 0; i < obj3.output.size(); i++) {
-		cout << obj3.output[i] << " ";
+	vector<vector<int>> TheTruthTable = generateTruthtableXY(NumOfInputs);
+	for (int i = 0; i < iterations; i++) {
+		srand(time(0) * i);
+		int Rand = rand() % (int)pow(2, NumOfInputs);
+		cout << "Gate Name: " << inputGate.name << " | " << "Rand: " << Rand << endl;
+		vector<int> inputarr = TheTruthTable[Rand];
+		cout << "input arr: "; printVector<int>(inputarr); cout << endl;
+		inputGate.inputValues(inputarr); //TODO Figure out assigning values to internal objects
+		if (inputGate.ObjectTypeIdentifier == 1)inputGate.parallelCalc();
+		else if (inputGate.ObjectTypeIdentifier == 2)inputGate.Calc(); //TODO calculate them and Figure out passing out internal objects' outputs correctly
+		else cout << "Complex Gates coming soon..." << endl;
+		inputGate.printValue();
+		cout << endl;
 	}
-	cout << endl;
-	obj3.clear();
 }
 
 //TODO find out how many inputs the obj inputs and how many outputs the obj outputs and then process it inside the big object and then output accordingly...

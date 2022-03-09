@@ -15,7 +15,7 @@ namespace tommylogic {
 
 	template <typename T>
 	void printVector(vector<T> input) {
-		for (int i = 0; i < input.size(); i++) cout << input[i] << endl;
+		for (int i = 0; i < input.size(); i++) cout << input[i] << " ";
 	}
 
 	void printTruthtable(int InputSize, vector<vector<int>> TruthTableInput, vector<int> TruthTableResult) {
