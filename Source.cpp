@@ -17,34 +17,26 @@ AND----OR----NAND----NOR----XNOR----XOR
 void gateLoop(LogicGate inputGate, int NumOfInputs, int i);
 
 int main() {
-	LogicGate obj1; LogicGate obj2; LogicGate obj3; LogicGate multi1; LogicGate multi2; LogicGate Complex1;
-
-	//obj1.inputValues({ 1,1,1,0 }); 
-
-	obj1.define({ 1,2,3 }); obj1.setName("AND,OR,NOT");
-	obj2.define({ 2,1,3 }); obj2.setName("OR,AND,NOT");
-	obj3.define({ 1,1 }); obj3.setName("AND,AND");
-
-	multi1.define({ obj1, obj2, obj3 }); multi1.setName("multi-1");
-	multi2.define({ obj3, obj2, obj1 }); multi2.setName("multi-2");
-
-	Complex1.define({ multi1,multi2 }); Complex1.setName("Complex-1");
-
-	gateLoop(obj1, 5, 10);
-	gateLoop(multi1, 14, 5);
-	gateLoop(multi2, 14, 5);
-	//gateLoop(Complex1, 28, 10);
 	
+	RecurObjTest obj11("obj11"), obj12("obj12"), obj13("obj13"), obj14("obj14");
+	RecurObjTest obj21("obj21"), obj22("obj22");
+	RecurObjTest obj31("obj31");
 
-	cout << "NumOfInputs: " << multi1.NumOfInputs << endl;
-	cout << "NumOfOutputs: " << multi1.NumOfOutputs << endl;
+	obj21.input({ &obj11,&obj12 });
+	obj22.input({ &obj13,&obj14 });
 
-	//for (int i = 0; i < input6.size(); i++) {
-	//	for (int j = 0; j < input6[i].size(); j++) {
-	//		cout << input6[i][j] << " ";
-	//	}
-	//	cout << "| "; foo(input6, i); cout << endl;
-	//}
+	obj31.input({ &obj21,&obj22 });
+
+	obj31.calling();
+
+	obj31.print();
+	obj21.print();
+	obj22.print();
+	obj11.print();
+	obj12.print();
+	obj13.print();
+	obj14.print();
+
 }
 
 void gateLoop(LogicGate inputGate, int NumOfInputs, int iterations) {
@@ -140,4 +132,30 @@ void gateLoop(LogicGate inputGate, int NumOfInputs, int iterations) {
 	for (int i = 0; i < obj1.output.size(); i++) {
 		cout << obj1.output[i] << endl;
 	}
+*/
+
+/*
+
+LogicGate obj1; LogicGate obj2; LogicGate obj3; LogicGate multi1; LogicGate multi2; LogicGate Complex1;
+
+	//obj1.inputValues({ 1,1,1,0 });
+
+	obj1.define({ 1,2,3 }); obj1.setName("AND,OR,NOT");
+	obj2.define({ 2,1,3 }); obj2.setName("OR,AND,NOT");
+	obj3.define({ 1,1 }); obj3.setName("AND,AND");
+
+	multi1.define({ obj1, obj2, obj3 }); multi1.setName("multi-1");
+	multi2.define({ obj3, obj2, obj1 }); multi2.setName("multi-2");
+
+	Complex1.define({ multi1,multi2 }); Complex1.setName("Complex-1");
+
+	gateLoop(obj1, 5, 10);
+	gateLoop(multi1, 14, 5);
+	gateLoop(multi2, 14, 5);
+	//gateLoop(Complex1, 28, 10);
+
+
+	cout << "NumOfInputs: " << multi1.NumOfInputs << endl;
+	cout << "NumOfOutputs: " << multi1.NumOfOutputs << endl;
+
 */

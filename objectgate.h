@@ -372,3 +372,60 @@ public:
 // vector<int> input
 
 */
+
+#pragma once
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class RecurObjTest {
+private:
+	vector<RecurObjTest*> ObjList;
+	vector<string> ObjNames;
+
+public:
+	string Name = "";
+
+	int GotCalled = 0;
+	int GotTriggered = 0;
+	int ObjListSize = 0;
+
+	RecurObjTest(string name) {
+		Name = name;
+	}
+
+	void calling() {
+		if (ObjList.size() == 0) {
+			Trigger();
+			return;
+		}
+		Called();
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->calling();
+			this->ObjNames.push_back(ObjList[i]->Name);
+		}
+	}
+
+	void Trigger() {
+		GotTriggered++;
+	}
+
+	void Called() {
+		GotCalled++;
+	}
+
+	void input(vector<RecurObjTest*> objList) {
+		ObjList = objList;
+	}
+
+	void print() {
+		cout << Name << " Got Called: " << GotCalled << endl;
+		cout << Name << " Got Triggered: " << GotTriggered << endl;
+		cout << "Object Names: ";
+		for (int i = 0; i < this->ObjList.size(); i++) {
+			cout << ObjNames[i] << " ";
+		}
+		cout << endl << "==============" << endl;
+	}
+};
