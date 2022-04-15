@@ -23,8 +23,5 @@
     <ClInclude Include="tommylogic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="objectgate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
