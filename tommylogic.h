@@ -130,6 +130,15 @@ public:
 		Called();
 	}
 
+	void clearOutput() {
+		this->Output = {};
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->clearOutput();
+
+			ObjList[i]->Output = {};
+		}
+	}
+
 	void assignFunctions(int inputgates) {
 		switch (inputgates)
 		{

@@ -69,4 +69,50 @@ int main() {
 	obj17.print();
 	obj18.print();
 
+	cout << "=================================" << endl;
+	cout << "=================================" << endl;
+	cout << "=================================" << endl;
+
+	obj41.clearOutput();
+
+	obj11.input(1);
+	obj12.input(0);
+	obj13.input(1, 1);
+	obj14.input(1, 0);
+	obj15.input(0);
+	obj16.input(1);
+	obj17.input(0, 1);
+	obj18.input(0, 0);
+
+	obj21.input({ &obj11,&obj12 });
+	obj22.input({ &obj13,&obj14 });
+	obj23.input({ &obj15,&obj16 });
+	obj24.input({ &obj17,&obj18 });
+
+	obj31.input({ &obj21,&obj22 });
+	obj32.input({ &obj23,&obj24 });
+
+	obj41.input({ &obj31,&obj32 });
+
+	obj41.call();
+
+	obj41.print();
+
+	obj31.print();
+	obj32.print();
+
+	obj21.print();
+	obj22.print();
+	obj23.print();
+	obj24.print();
+
+	obj11.print();
+	obj12.print();
+	obj13.print();
+	obj14.print();
+	obj15.print();
+	obj16.print();
+	obj17.print();
+	obj18.print();
+
 }
