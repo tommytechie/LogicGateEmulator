@@ -87,13 +87,22 @@ namespace tommylogic {
 using tommylogic::printVector; using tommylogic::vectorSizeChecker; using tommylogic::printTruthtable;
 
 class LogicGate {
-private:
-
+protected:
 	vector<LogicGate*> ObjList;
+
+private:
+	
 	vector<string> ObjNames;
 
-	pair<int, int> Input;
+	pair<int, int> Input = {2,2};
 	vector<int> Output;
+	
+	vector<int> CalculatedInput;
+	pair<int,int> CalculatedInputPair;
+	vector<int> CalculatedOutput;
+
+	int TriggerGateNum = NULL;
+	int NumOfInputs = NULL;
 
 	int (LogicGate::* TempFunc) (pair<int, int> inputvalue);
 
@@ -113,6 +122,7 @@ private:
 
 public:
 	string Name = "";
+	string FundamentalGateName = "";
 
 	int GotCalled = 0;
 	int GotTriggered = 0;
@@ -128,6 +138,7 @@ public:
 			return;
 		}
 		Called();
+		ObjListSize = this->ObjList.size();
 	}
 
 	void clearOutput() {
@@ -140,23 +151,33 @@ public:
 	}
 
 	void assignFunctions(int inputgates) {
+		TriggerGateNum = inputgates;
 		switch (inputgates)
 		{
-		case 0:
-			TempFunc = &LogicGate::YES;
-			break;
 		case 1:
-			TempFunc = &LogicGate::NOT;
+			TempFunc = &LogicGate::YES;
+			FundamentalGateName = "YES";
+			NumOfInputs = 1;
 			break;
 		case 2:
-			TempFunc = &LogicGate::AND;
+			TempFunc = &LogicGate::NOT;
+			FundamentalGateName = "NOT";
+			NumOfInputs = 1;
 			break;
 		case 3:
+			TempFunc = &LogicGate::AND;
+			FundamentalGateName = "AND";
+			NumOfInputs = 2;
+			break;
+		case 4:
 			TempFunc = &LogicGate::OR;
+			FundamentalGateName = "OR";
+			NumOfInputs = 2;
 			break;
 		default:
 			cout << "WARNING: Wrong Function Assigned" << endl;
 			TempFunc = &LogicGate::YES;
+			FundamentalGateName = "WRONG GATE";
 			break;//Nothing...
 		}
 	}
@@ -178,6 +199,26 @@ public:
 				this->Output.push_back(ObjList[i]->Output[j]);
 			}
 		}
+
+		if (TriggerGateNum != NULL) { //When the intermiediate object is assigned a gate function
+			
+			for (int i = 0; i < this->Output.size(); i++) {
+				CalculatedInput.push_back(this->Output[i]);
+			}
+			//cout << "Call Calculating, CalculatedInput.size(): " << CalculatedInput.size() << endl;
+			if (CalculatedInput.size() == 1) {
+				CalculatedInputPair.first = CalculatedInput[0];
+				CalculatedInputPair.second = 2;
+				this->CalculatedOutput.push_back((this->*TempFunc)(this->CalculatedInputPair));
+			}
+			if (CalculatedInput.size() >= 2) {
+				CalculatedInputPair.first = CalculatedInput[0];
+				CalculatedInputPair.second = CalculatedInput[1];
+				this->CalculatedOutput.push_back((this->*TempFunc)(this->CalculatedInputPair));
+			}
+			Output = CalculatedOutput;
+		}
+		
 	}
 
 	void input(int first) { //for NOT and YES gates
@@ -193,8 +234,24 @@ public:
 	}
 
 	void print() {
-		cout << Name << " Got Called: " << GotCalled << endl;
+		cout << Name; if (FundamentalGateName != "") { cout << " (" << FundamentalGateName << ")"; } cout << " // Number of Inputs: " << NumOfInputs << " // Trigger Gate Number: " << TriggerGateNum << endl;
+		cout << Name << " Got Called: " << GotCalled << " // Object List Size: " << ObjListSize << endl;
 		cout << Name << " Got Triggered: " << GotTriggered << endl;
+		if (Input.first == 2) {
+			if (CalculatedInputPair.first == 2) {
+				cout << "Input: N/A" << endl;
+			}
+			else if (CalculatedInputPair.second == 2) {
+				cout << "Input from Obj: " << CalculatedInputPair.first << endl;
+			}
+			else {
+				cout << "Input from Obj: " << CalculatedInputPair.first << " , " << CalculatedInputPair.second << endl;
+			}
+		}else if(Input.second == 2) {
+			cout << "Input: " << Input.first << endl;
+		}else {
+			cout << "Input: " << Input.first << " , " << Input.second << endl;
+		}
 		cout << "Output: ";
 		for (int i = 0; i < Output.size(); i++) {
 			cout << Output[i] << " ";
@@ -205,5 +262,17 @@ public:
 			cout << ObjNames[i] << " ";
 		}
 		cout << endl << "==============" << endl;
+	}
+};
+
+class UseGate:LogicGate {
+private:
+
+public:
+
+	UseGate(LogicGate ObjGate):LogicGate(ObjGate) {
+		for (int i = 0; i < ObjGate.ObjListSize; i++) {
+
+		}
 	}
 };
