@@ -265,12 +265,12 @@ public:
 	}
 };
 
-class UseGate:LogicGate {
+class UseGate :LogicGate {
 private:
 
 public:
 
-	UseGate(LogicGate ObjGate):LogicGate(ObjGate) {
+	UseGate(LogicGate ObjGate) :LogicGate(ObjGate) {
 		for (int i = 0; i < ObjGate.ObjListSize; i++) {
 
 		}
