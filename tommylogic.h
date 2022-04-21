@@ -85,13 +85,28 @@ namespace tommylogic {
 }
 
 using tommylogic::printVector; using tommylogic::vectorSizeChecker; using tommylogic::printTruthtable;
+class LogicGate;
+
+struct ObjectStore {
+	vector<LogicGate*> ObjTree;
+};
 
 class LogicGate {
 protected:
 	vector<LogicGate*> ObjList;
 
+	vector<LogicGate*> TmpObjTree;
+
+	void recurObjFunc(ObjectStore* obj) { //Return a whole list of objects in the hierarchy instead of just the one below
+		//cout << "Object Name: " << this->Name << " | ObjList.size() = " << ObjList.size() << endl;
+		TmpObjTree.push_back(this);
+		obj->ObjTree.push_back(this);
+		for (int i = 0; i < ObjList.size(); i++) {
+			ObjList[i]->recurObjFunc(obj);
+		}
+	}
+
 private:
-	
 	vector<string> ObjNames;
 
 	pair<int, int> Input = {2,2};
@@ -101,7 +116,6 @@ private:
 	pair<int,int> CalculatedInputPair;
 	vector<int> CalculatedOutput;
 
-	int TriggerGateNum = NULL;
 	int NumOfInputs = NULL;
 
 	int (LogicGate::* TempFunc) (pair<int, int> inputvalue);
@@ -120,6 +134,8 @@ private:
 		else return 1;
 	}
 
+	
+
 public:
 	string Name = "";
 	string FundamentalGateName = "";
@@ -127,6 +143,8 @@ public:
 	int GotCalled = 0;
 	int GotTriggered = 0;
 	int ObjListSize = 0;
+
+	int TriggerGateNum = NULL;
 
 	LogicGate(string name) {
 		Name = name;
@@ -265,14 +283,71 @@ public:
 	}
 };
 
-class UseGate :LogicGate {
+class UseGate:LogicGate {
 private:
+	LogicGate Obj{"Default"};
+
+	vector<LogicGate*> CurrentObjArr;
 
 public:
+	UseGate(LogicGate ObjGate):LogicGate(ObjGate) {
+		Obj = ObjGate;
+		//cout << "ObjGate.ObjListSize = " << ObjGate.ObjListSize << endl;
+		
+		ObjectStore objtree;
+		this->recurObjFunc(&objtree);
+		CurrentObjArr = objtree.ObjTree;
+	}
 
-	UseGate(LogicGate ObjGate) :LogicGate(ObjGate) {
-		for (int i = 0; i < ObjGate.ObjListSize; i++) {
+	void call() {
+		Obj.call();
+	}
 
+	void inputAll(vector<int> inputBool) {
+		int Counter = 0;
+		for (int i = 0; i < CurrentObjArr.size(); i++) {
+			if (Counter >= inputBool.size()) {
+				cout << "WRONG NUMBER OF INPUT PROVIDED (UseGate:LogicGate void inputAll)" << endl;
+				return;
+			}
+			if (CurrentObjArr[i]->ObjListSize == 0) {
+				switch (CurrentObjArr[i]->TriggerGateNum) {
+				case 1:
+					CurrentObjArr[i]->input(inputBool[Counter]);
+					Counter++;
+					break;
+				case 2:
+					CurrentObjArr[i]->input(inputBool[Counter]);
+					Counter++;
+					break;
+				case 3:
+					CurrentObjArr[i]->input(inputBool[Counter],inputBool[Counter+1]);
+					Counter = Counter + 2;
+					break;
+				case 4:
+					CurrentObjArr[i]->input(inputBool[Counter], inputBool[Counter + 1]);
+					Counter = Counter + 2;
+					break;
+				default:
+					cout << "Wrong Gate Number (UseGate:LogicGate void inputAll)" << endl;
+					break;
+				}
+			}
 		}
 	}
+
+	void printAll() {
+		for (int i = 0; i < CurrentObjArr.size(); i++) {
+			CurrentObjArr[i]->print();
+		}
+		cout << "=================================" << endl;
+		cout << endl << "INPUT ORDER: " << endl;
+		for (int i = 0; i < CurrentObjArr.size(); i++) {
+			if (CurrentObjArr[i]->ObjListSize == 0) {
+				cout << CurrentObjArr[i]->Name << "(" << CurrentObjArr[i]->FundamentalGateName << "), ";
+			}
+		}
+		cout << endl << "=================================" << endl;
+	}
+
 };

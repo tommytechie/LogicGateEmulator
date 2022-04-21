@@ -119,12 +119,6 @@ int main() {
 	cout << "=================================" << endl;
 	cout << "=================================" << endl;
 
-	UseGate gate1(obj41);
-
-	cout << "=================================" << endl;
-	cout << "=================================" << endl;
-	cout << "=================================" << endl;
-
 	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9"), obj10("obj10");
 
 	obj1.assignFunctions(3);//AND
@@ -144,24 +138,26 @@ int main() {
 
 	obj9.assignFunctions(3);//AND
 
-	obj1.input(0,1);
+	
 	obj2.input({ &obj1 });
-
-	obj3.input(0, 0);
+	
 	obj4.input({ &obj3 });
 
 	obj5.input({ &obj2, &obj4 });
-
-	obj6.input(0, 1);
+	
 	obj7.input({ &obj6 });
-
-	obj10.input(0);
 
 	obj8.input({ &obj7, &obj10 });
 
 	obj9.input({ &obj5, &obj8 });
 
+	obj1.input(0, 1);
+	obj3.input(0, 0);
+	obj6.input(0, 1);
+	obj10.input(0);
+
 	obj9.call();
+	//obj9.clearOutput();
 
 	obj1.print();
 	obj2.print();
@@ -173,4 +169,17 @@ int main() {
 	obj8.print();
 	obj9.print();
 	obj10.print();
+
+	cout << "=================================" << endl;
+	cout << "=================================" << endl;
+	cout << "=================================" << endl;
+
+	UseGate gate1(obj9);
+	//gate1.printAll();
+
+	gate1.inputAll({ 0,1,0,0,0,1,0 });
+
+	gate1.call();
+
+	gate1.printAll();
 }
