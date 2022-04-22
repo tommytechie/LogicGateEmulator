@@ -93,8 +93,6 @@ struct ObjectStore {
 
 class LogicGate {
 protected:
-	vector<LogicGate*> ObjList;
-
 	vector<LogicGate*> TmpObjTree;
 
 	void recurObjFunc(ObjectStore* obj) { //Return a whole list of objects in the hierarchy instead of just the one below
@@ -112,10 +110,9 @@ private:
 	pair<int, int> Input = {2,2};
 	vector<int> Output;
 	
-	vector<int> CalculatedInput;
+	vector<int> CalculatedInput;	//Put the Output into CalculatedInput because intermiediate gates and the final gate for result also function as gates
 	pair<int,int> CalculatedInputPair;
-	vector<int> CalculatedOutput;
-
+	
 	int NumOfInputs = NULL;
 
 	int (LogicGate::* TempFunc) (pair<int, int> inputvalue);
@@ -137,8 +134,12 @@ private:
 	
 
 public:
+	vector<LogicGate*> ObjList;
+
 	string Name = "";
 	string FundamentalGateName = "";
+
+	vector<int> CalculatedOutput;
 
 	int GotCalled = 0;
 	int GotTriggered = 0;
@@ -151,12 +152,13 @@ public:
 	}
 
 	void call() {
+		ObjListSize = this->ObjList.size();
 		if (ObjList.size() == 0) {
 			Trigger();
 			return;
 		}
 		Called();
-		ObjListSize = this->ObjList.size();
+		
 	}
 
 	void clearOutput() {
@@ -243,12 +245,13 @@ public:
 		Input.first = first;
 		Input.second = 2;
 	}
-	void input(int first, int second) { //other gates
+	void input(int first, int second) { //for AND and OR or maybe more in the future for performance purposes
 		Input.first = first;
 		Input.second = second;
 	}
 	void input(vector<LogicGate*> objList) { //Complex Object Gate
 		ObjList = objList;
+		this->ObjListSize = this->ObjList.size();
 	}
 
 	void print() {
@@ -275,8 +278,8 @@ public:
 			cout << Output[i] << " ";
 		}
 		cout << endl;
-		cout << "Object Names: ";
-		for (int i = 0; i < this->ObjList.size(); i++) {
+		cout << "ObjList.size() = " << this->ObjList.size() << " Object Names: " << endl;
+		for (int i = 0; i < this->ObjNames.size(); i++) {
 			cout << ObjNames[i] << " ";
 		}
 		cout << endl << "==============" << endl;
@@ -285,12 +288,12 @@ public:
 
 class UseGate:LogicGate {
 private:
-	LogicGate Obj{"Default"};
+	LogicGate* Obj;
 
 	vector<LogicGate*> CurrentObjArr;
 
 public:
-	UseGate(LogicGate ObjGate):LogicGate(ObjGate) {
+	UseGate(LogicGate* ObjGate):LogicGate(*ObjGate) {
 		Obj = ObjGate;
 		//cout << "ObjGate.ObjListSize = " << ObjGate.ObjListSize << endl;
 		
@@ -300,7 +303,7 @@ public:
 	}
 
 	void call() {
-		Obj.call();
+		Obj->call();
 	}
 
 	void inputAll(vector<int> inputBool) {
@@ -337,7 +340,12 @@ public:
 	}
 
 	void printAll() {
-		for (int i = 0; i < CurrentObjArr.size(); i++) {
+		cout << "RESULT: ";
+		for (int i = 0; i < Obj->CalculatedOutput.size(); i++) {
+			cout << Obj->CalculatedOutput[i] << " | ";
+		}cout << endl << "---------------" << endl;
+		Obj->print();
+		for (int i = 1; i < CurrentObjArr.size(); i++) {
 			CurrentObjArr[i]->print();
 		}
 		cout << "=================================" << endl;
@@ -350,4 +358,7 @@ public:
 		cout << endl << "=================================" << endl;
 	}
 
+	void clear() {
+		Obj->clearOutput();
+	}
 };

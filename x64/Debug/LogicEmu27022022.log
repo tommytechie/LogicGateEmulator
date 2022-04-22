@@ -3,5 +3,6 @@ C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\
 C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(39,30): warning C4018: '<': signed/unsigned mismatch
 C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(48,26): warning C4018: '<': signed/unsigned mismatch
 C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(50,27): warning C4018: '<': signed/unsigned mismatch
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(159,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(155,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(254,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   LogicEmu27022022.vcxproj -> C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\x64\Debug\LogicEmu27022022.exe
