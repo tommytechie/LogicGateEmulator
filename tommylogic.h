@@ -153,20 +153,29 @@ public:
 
 	void call() {
 		ObjListSize = this->ObjList.size();
+
+		this->ObjNames.clear();
+		this->Output.clear();
+		this->CalculatedOutput.clear();
+		this->CalculatedInput.clear();
+		this->CalculatedInputPair = {};
+
 		if (ObjList.size() == 0) {
 			Trigger();
 			return;
 		}
 		Called();
-		
 	}
 
-	void clearOutput() {
+	void clear() { //TODO Clear the hierarchies! (relationships between the objects)
 		this->Output = {};
 		for (int i = 0; i < ObjList.size(); i++) {
-			ObjList[i]->clearOutput();
+			ObjList[i]->clear();
 
 			ObjList[i]->Output = {};
+			ObjList[i]->Input = {};
+			ObjList[i]->CalculatedInput = {};
+			ObjList[i]->CalculatedInputPair = {};
 		}
 	}
 
@@ -210,9 +219,10 @@ public:
 
 	void Called() { //to summarize calculations from lower objects
 		GotCalled++;
+		
 		for (int i = 0; i < ObjList.size(); i++) {
 			ObjList[i]->call(); //Recursive calling into the hierarchy
-
+			
 			this->ObjNames.push_back(ObjList[i]->Name);//Get ObjNames down from the hierarchy, put into this-> ObjNames array.
 
 			for (int j = 0; j < this->ObjList[i]->Output.size(); j++) {//Get Fundamental Gates result from their Output down from the hierarchy, put into this-> Output array
@@ -306,11 +316,37 @@ public:
 		Obj->call();
 	}
 
+	void checkNumOfInputs() {
+		int Counter = 0;
+		for (int i = 0; i < CurrentObjArr.size(); i++) {
+			if (CurrentObjArr[i]->ObjListSize == 0) {
+				switch (CurrentObjArr[i]->TriggerGateNum) {
+				case 1:
+					Counter++;
+					break;
+				case 2:
+					Counter++;
+					break;
+				case 3:
+					Counter = Counter + 2;
+					break;
+				case 4:
+					Counter = Counter + 2;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		cout << "You should input " << Counter << " number of inputs." << endl;
+	}
+
 	void inputAll(vector<int> inputBool) {
 		int Counter = 0;
 		for (int i = 0; i < CurrentObjArr.size(); i++) {
 			if (Counter >= inputBool.size()) {
-				cout << "WRONG NUMBER OF INPUT PROVIDED (UseGate:LogicGate void inputAll)" << endl;
+				cout << "TOO FEW INPUTS PROVIDED (UseGate:LogicGate void inputAll)" << endl;
+				checkNumOfInputs();
 				return;
 			}
 			if (CurrentObjArr[i]->ObjListSize == 0) {
@@ -358,7 +394,14 @@ public:
 		cout << endl << "=================================" << endl;
 	}
 
+	void printResult() {
+		cout << "RESULT: ";
+		for (int i = 0; i < Obj->CalculatedOutput.size(); i++) {
+			cout << Obj->CalculatedOutput[i] << " | ";
+		}
+	}
+
 	void clear() {
-		Obj->clearOutput();
+		Obj->clear();
 	}
 };

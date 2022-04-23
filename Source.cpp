@@ -13,6 +13,19 @@ AND----OR----NAND----NOR----XNOR----XOR
 
 */
 
+void loopInput(UseGate obj, vector<vector<int>> input) {
+	for (int i = 0; i < input.size(); i++) {
+		cout << "Input: ";
+		for (int j = 0; j < input[i].size(); j++) {
+			cout << input[i][j] << " , ";
+		}cout << endl;
+		obj.inputAll(input[i]);
+		obj.call();
+		obj.printResult();
+		cout << endl << "===============" << endl;
+	}
+}
+
 int main() {
 	LogicGate obj1("obj1"), obj2("obj2"), obj3("obj3"), obj4("obj4"), obj5("obj5"), obj6("obj6"), obj7("obj7"), obj8("obj8"), obj9("obj9"), obj10("obj10");
 
@@ -31,7 +44,7 @@ int main() {
 
 	obj8.assignFunctions(3);//AND
 
-	obj9.assignFunctions(3);//AND
+	obj9.assignFunctions(4);//AND
 
 	
 	obj2.input({ &obj1 });
@@ -79,25 +92,27 @@ int main() {
 	cout << "=================================" << endl;
 	cout << "=================================" << endl;
 
+	vector<vector<int>> TruthTable7;
+
+	TruthTable7 = generateTruthtableXY(7);
+
 	UseGate gate1(&obj9);
-	//gate1.printAll();
-
+	/*
 	gate1.inputAll({ 0,1,0,0,0,1,0 });
-
 	gate1.call();
-
 	gate1.printAll();
-
-	gate1.clear();
-
 	gate1.inputAll({ 0,1,0,0,0,1,0 });
-
 	gate1.call();
-
 	gate1.printAll();
-
+	gate1.printResult();
+	*/
+	loopInput(gate1, TruthTable7);
 
 }
+
+
+
+
 
 /*
 	LogicGate obj11("obj11"), obj12("obj12"), obj13("obj13"), obj14("obj14"), obj15("obj15"), obj16("obj16"), obj17("obj17"), obj18("obj18");
