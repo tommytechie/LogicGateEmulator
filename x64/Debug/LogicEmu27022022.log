@@ -1,8 +1,1 @@
-﻿  Source.cpp
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\LogicGateCore.h(72,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\LogicGateCore.h(181,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(36,67): warning C4334: '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(39,30): warning C4018: '<': signed/unsigned mismatch
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(48,26): warning C4018: '<': signed/unsigned mismatch
-C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\tommylogic.h(50,27): warning C4018: '<': signed/unsigned mismatch
-  LogicEmu27022022.vcxproj -> C:\Users\tommy\OneDrive\My Saved Files\VS C++\Electrical\Logic\LogicEmu27022022\x64\Debug\LogicEmu27022022.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(411,5): error MSB8020: The build tools for v143 (Platform Toolset = 'v143') cannot be found. To build using the v143 build tools, please install v143 build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting "Retarget solution".
